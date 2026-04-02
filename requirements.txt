@@ -1,0 +1,24 @@
+# Install from project root: pip install -r requirements.txt
+# Use a virtual environment (recommended).
+
+# Data / features / video
+numpy>=1.24
+pandas>=2.0
+pyarrow>=12.0
+opencv-python>=4.8
+mediapipe>=0.10
+tqdm>=4.66
+
+# ML training & inference
+scikit-learn>=1.3
+joblib>=1.3
+xgboost>=2.0
+lightgbm>=4.0
+catboost>=1.2
+torch>=2.0
+pytorch-tabnet>=4.0
+
+# HTTP API (see also backend/requirements.txt)
+fastapi>=0.115.0
+uvicorn[standard]>=0.27.0
+python-multipart>=0.0.9

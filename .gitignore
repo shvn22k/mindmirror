@@ -1,0 +1,101 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# IDE / local tooling
+.idea/
+*.swp
+*.swo
+
+# Cursor / MCP (local editor config)
+.cursor/
+mcps/
+
+# ---------------------------------------------------------------------------
+# Data & datasets — do not push to GitHub
+# ---------------------------------------------------------------------------
+# Ignore everything under data/ (videos, landmarks, parquet, CSV exports, etc.).
+# Only the documentation file stays tracked.
+data/*
+!data/README.md
+
+# If you add other paths outside data/ for dumps, they are covered by patterns
+# below; still avoid committing secrets inside notebooks or configs.
+
+# Video / audio (dataset media, screen captures, recordings)
+*.avi
+*.mp4
+*.mov
+*.webm
+*.mkv
+*.m4v
+*.wav
+*.flac
+*.ogg
+
+# Numerical / tabular dumps (often huge)
+*.npy
+*.npz
+*.parquet
+*.feather
+*.arrow
+
+# Serialized arrays / HDF5
+*.h5
+*.hdf5
+
+# Python pickles (often data or ad-hoc model blobs)
+*.pkl
+*.pickle
+
+# Model / booster exports (if not only under models/trained/)
+*.joblib
+*.cbm
+
+# If you ever export grids as CSV at repo root or under a custom folder, block them.
+# (Remove this line only if you intentionally commit small non-data CSVs.)
+*.csv
+*.tsv
+
+# Trained weights and preprocess artifact
+models/trained/*
+!models/trained/.gitkeep
+
+# MediaPipe task bundle (downloaded at runtime)
+models/mediapipe/*.task
+
+# Training / model training artifacts
+artifacts/
+
+# Generated evaluation outputs
+results/*
+!results/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Coverage / test
+.pytest_cache/
+.coverage
+htmlcov/

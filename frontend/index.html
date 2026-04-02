@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cognitive load — API test</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto+Slab:wght@100..900&family=Saira:ital,wght@0,100..900;1,100..900&family=Source+Sans+3:ital,wght@0,300;1,300&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #f5f3ee;
+      --secondary: #c4d9b8;
+      --secondary-deep: #9fb894;
+      --ink: #2a3328;
+      --border: #3d4f38;
+    }
+
+    .playfair-display-title {
+      font-family: "Playfair Display", serif;
+      font-optical-sizing: auto;
+      font-weight: 600;
+      font-style: normal;
+    }
+
+    .source-sans-3-body,
+    body.source-sans-3-body {
+      font-family: "Source Sans 3", sans-serif;
+      font-optical-sizing: auto;
+      font-weight: 300;
+      font-style: normal;
+    }
+
+    .saira-button {
+      font-family: "Saira", sans-serif;
+      font-optical-sizing: auto;
+      font-weight: 500;
+      font-style: normal;
+      font-variation-settings: "wdth" 100;
+    }
+
+    .roboto-slab-label {
+      font-family: "Roboto Slab", serif;
+      font-optical-sizing: auto;
+      font-weight: 500;
+      font-style: normal;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body.source-sans-3-body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-size: 1.25rem;
+      line-height: 1.55;
+      background-color: var(--primary);
+      background-image:
+        radial-gradient(ellipse 120% 80% at 15% 20%, rgba(196, 217, 184, 0.45) 0%, transparent 55%),
+        radial-gradient(ellipse 100% 70% at 85% 75%, rgba(180, 205, 168, 0.35) 0%, transparent 50%),
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(74, 92, 68, 0.03) 2px,
+          rgba(74, 92, 68, 0.03) 3px
+        );
+    }
+
+    main {
+      max-width: 40rem;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    h1 {
+      margin: 0 0 0.5rem;
+      font-size: 2.25rem;
+      letter-spacing: 0.02em;
+    }
+
+    .lead {
+      margin: 0 0 2rem;
+      font-size: 1.3rem;
+    }
+
+    .panel {
+      background: rgba(245, 243, 238, 0.92);
+      border: 2px solid var(--border);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    label.roboto-slab-label {
+      display: block;
+      margin-bottom: 0.35rem;
+      font-size: 1.1rem;
+    }
+
+    input[type="url"],
+    input[type="file"] {
+      width: 100%;
+      font-size: 1.1rem;
+      padding: 0.65rem 0.75rem;
+      border: 2px solid var(--border);
+      background: var(--primary);
+      color: var(--ink);
+      margin-bottom: 1.25rem;
+    }
+
+    input[type="file"] {
+      padding: 0.5rem;
+      cursor: pointer;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    button.saira-button {
+      cursor: pointer;
+      font-size: 1.15rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.75rem 1.35rem;
+      border: 2px solid var(--border);
+      background: var(--secondary);
+      color: var(--ink);
+      transition:
+        background 0.15s ease,
+        transform 0.12s ease,
+        box-shadow 0.12s ease;
+    }
+
+    button.saira-button:hover:not(:disabled) {
+      background: var(--secondary-deep);
+      box-shadow: 3px 3px 0 var(--border);
+      transform: translate(-1px, -1px);
+    }
+
+    button.saira-button:active:not(:disabled) {
+      transform: translate(0, 0);
+      box-shadow: none;
+    }
+
+    button.saira-button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    #status {
+      margin: 1rem 0 0;
+      font-size: 1.15rem;
+    }
+
+    pre {
+      margin: 1.5rem 0 0;
+      padding: 1.25rem;
+      border: 2px solid var(--border);
+      background: var(--secondary);
+      background-image: repeating-linear-gradient(
+        -5deg,
+        transparent,
+        transparent 4px,
+        rgba(255, 255, 255, 0.08) 4px,
+        rgba(255, 255, 255, 0.08) 5px
+      );
+      font-size: 1.05rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .error {
+      color: #5c2a2a;
+    }
+
+    video#camPreview {
+      width: 100%;
+      max-height: 16rem;
+      object-fit: cover;
+      border: 2px solid var(--border);
+      background: #1a1f18;
+      margin-bottom: 1rem;
+    }
+
+    .hint {
+      font-size: 1.05rem;
+      margin: 0 0 1rem;
+      opacity: 0.9;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      max-width: 8rem;
+      font-size: 1.1rem;
+      padding: 0.65rem 0.75rem;
+      border: 2px solid var(--border);
+      background: var(--primary);
+      color: var(--ink);
+      margin-bottom: 1rem;
+    }
+
+    h2.section-title {
+      margin: 0 0 0.75rem;
+      font-size: 1.5rem;
+    }
+  </style>
+</head>
+<body class="source-sans-3-body">
+  <main>
+    <h1 class="playfair-display-title">Cognitive load test</h1>
+    <p class="lead">Upload a short face video and call the local inference API. Start the backend with <code>uvicorn backend.main:app --port 8000</code> from the project root.</p>
+
+    <section class="panel">
+      <label class="roboto-slab-label" for="apiBase">API base URL</label>
+      <input type="url" id="apiBase" value="http://127.0.0.1:8000" autocomplete="off" />
+
+      <label class="roboto-slab-label" for="video">Video file</label>
+      <input type="file" id="video" accept="video/*,.mp4,.avi,.mov,.webm,.mkv" />
+
+      <div class="actions">
+        <button type="button" class="saira-button" id="btnHealth">Check health</button>
+        <button type="button" class="saira-button" id="btnPredict">Run predict</button>
+      </div>
+
+      <p id="status" class="source-sans-3-body" aria-live="polite"></p>
+    </section>
+
+    <section class="panel">
+      <h2 class="section-title playfair-display-title">Live webcam</h2>
+      <p class="hint source-sans-3-body">Records short segments (same idea as a clip), sends each to <code>/predict</code>, and stores outcomes for export. Use HTTPS or localhost so the browser allows the camera. If WebM fails on the server, install OpenCV with FFmpeg support or use Chrome and ensure codecs are available.</p>
+      <video id="camPreview" playsinline muted autoplay></video>
+      <label class="roboto-slab-label" for="segmentSec">Segment length (seconds)</label>
+      <input type="number" id="segmentSec" min="3" max="120" step="1" value="6" />
+      <div class="actions">
+        <button type="button" class="saira-button" id="btnLiveStart">Start live</button>
+        <button type="button" class="saira-button" id="btnLiveStop" disabled>Stop live</button>
+        <button type="button" class="saira-button" id="btnDownloadTxt" disabled>Download results.txt</button>
+        <button type="button" class="saira-button" id="btnClearLog" disabled>Clear session log</button>
+      </div>
+      <p id="liveStatus" class="source-sans-3-body" aria-live="polite"></p>
+    </section>
+
+    <pre id="out" class="source-sans-3-body" hidden></pre>
+  </main>
+
+  <script>
+    const apiBase = () => document.getElementById("apiBase").value.replace(/\/$/, "");
+    const statusEl = document.getElementById("status");
+    const outEl = document.getElementById("out");
+    const liveStatusEl = document.getElementById("liveStatus");
+    const camPreview = document.getElementById("camPreview");
+    const btnLiveStart = document.getElementById("btnLiveStart");
+    const btnLiveStop = document.getElementById("btnLiveStop");
+    const btnDownloadTxt = document.getElementById("btnDownloadTxt");
+    const btnClearLog = document.getElementById("btnClearLog");
+    const segmentSecInput = document.getElementById("segmentSec");
+
+    /** @type {{ sessionStarted: string, apiBase: string, segmentSeconds: number, entries: object[] }} */
+    let sessionLog = { sessionStarted: "", apiBase: "", segmentSeconds: 6, entries: [] };
+    let liveRunning = false;
+    let mediaStream = null;
+    let segmentCounter = 0;
+
+    function setStatus(msg, isError) {
+      statusEl.textContent = msg;
+      statusEl.className = "source-sans-3-body" + (isError ? " error" : "");
+    }
+
+    function setLiveStatus(msg, isError) {
+      liveStatusEl.textContent = msg;
+      liveStatusEl.className = "source-sans-3-body" + (isError ? " error" : "");
+    }
+
+    function showJson(data) {
+      outEl.hidden = false;
+      outEl.textContent = typeof data === "string" ? data : JSON.stringify(data, null, 2);
+    }
+
+    function pickRecorderMime() {
+      const candidates = [
+        "video/webm;codecs=vp9,opus",
+        "video/webm;codecs=vp8,opus",
+        "video/webm",
+        "video/mp4",
+      ];
+      for (const m of candidates) {
+        if (window.MediaRecorder && MediaRecorder.isTypeSupported(m)) return m;
+      }
+      return "";
+    }
+
+    function extensionForMime(mime) {
+      if (!mime) return ".webm";
+      if (mime.includes("mp4")) return ".mp4";
+      return ".webm";
+    }
+
+    function waitRecorderStop(recorder) {
+      return new Promise((resolve) => {
+        recorder.addEventListener("stop", () => resolve(), { once: true });
+      });
+    }
+
+    function recordSegment(stream, mimeType, durationMs) {
+      return new Promise((resolve, reject) => {
+        let recorder;
+        try {
+          recorder = mimeType
+            ? new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 2_500_000 })
+            : new MediaRecorder(stream, { videoBitsPerSecond: 2_500_000 });
+        } catch (e) {
+          reject(e);
+          return;
+        }
+        const chunks = [];
+        recorder.ondataavailable = (e) => {
+          if (e.data && e.data.size > 0) chunks.push(e.data);
+        };
+        recorder.onerror = (e) => reject(e.error || new Error("MediaRecorder error"));
+
+        const stopped = waitRecorderStop(recorder);
+        recorder.start();
+        setTimeout(() => {
+          try {
+            recorder.stop();
+          } catch (err) {
+            reject(err);
+          }
+        }, durationMs);
+
+        stopped.then(() => {
+          const type = chunks[0]?.type || recorder.mimeType || mimeType || "video/webm";
+          resolve(new Blob(chunks, { type }));
+        }).catch(reject);
+      });
+    }
+
+    async function postPredictBlob(blob, filename) {
+      const fd = new FormData();
+      fd.append("file", blob, filename);
+      const r = await fetch(apiBase() + "/predict", { method: "POST", body: fd });
+      const text = await r.text();
+      let body;
+      try {
+        body = JSON.parse(text);
+      } catch {
+        body = text;
+      }
+      return { ok: r.ok, status: r.status, body };
+    }
+
+    function formatSessionLogText() {
+      const lines = [];
+      lines.push("Cognitive load inference — session log");
+      lines.push("========================================");
+      lines.push("Session start (UTC): " + sessionLog.sessionStarted);
+      lines.push("API base: " + sessionLog.apiBase);
+      lines.push("Segment length (seconds): " + sessionLog.segmentSeconds);
+      lines.push("");
+
+      sessionLog.entries.forEach((e, i) => {
+        lines.push("--- Entry " + (i + 1) + " | " + e.timestampUtc);
+        lines.push("    segment_index: " + e.segmentIndex);
+        lines.push("    filename: " + e.filename);
+        lines.push("    http_status: " + e.httpStatus);
+        if (e.ok && e.payload && typeof e.payload === "object" && !Array.isArray(e.payload)) {
+          const p = e.payload;
+          if (typeof p.regression_score === "number")
+            lines.push("    regression_score: " + p.regression_score);
+          if (p.classification_label != null)
+            lines.push("    classification_label: " + p.classification_label);
+          if (p.classification_class_index != null)
+            lines.push("    classification_class_index: " + p.classification_class_index);
+          if (p.n_frames_used != null) lines.push("    n_frames_used: " + p.n_frames_used);
+          if (p.probabilities && typeof p.probabilities === "object") {
+            lines.push("    probabilities:");
+            Object.keys(p.probabilities).forEach((k) => {
+              lines.push("      " + k + ": " + p.probabilities[k]);
+            });
+          }
+          if (Array.isArray(p.warnings) && p.warnings.length)
+            lines.push("    warnings: " + JSON.stringify(p.warnings));
+        } else {
+          lines.push("    error_or_body: " + (typeof e.payload === "string" ? e.payload : JSON.stringify(e.payload)));
+        }
+        lines.push("");
+      });
+
+      lines.push("--- End of log (" + sessionLog.entries.length + " entries) ---");
+      return lines.join("\n");
+    }
+
+    function downloadTextFile(filename, text) {
+      const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    function updateLogButtons() {
+      const n = sessionLog.entries.length;
+      btnDownloadTxt.disabled = n === 0;
+      btnClearLog.disabled = n === 0;
+    }
+
+    document.getElementById("btnHealth").addEventListener("click", async () => {
+      setStatus("Checking…");
+      outEl.hidden = true;
+      try {
+        const r = await fetch(apiBase() + "/health");
+        const j = await r.json();
+        setStatus(r.ok ? "Health OK." : "Health returned an error.");
+        showJson(j);
+      } catch (e) {
+        setStatus("Request failed (is the server running? CORS enabled?).", true);
+        showJson(String(e));
+      }
+    });
+
+    document.getElementById("btnPredict").addEventListener("click", async () => {
+      const input = document.getElementById("video");
+      const file = input.files && input.files[0];
+      if (!file) {
+        setStatus("Choose a video file first.", true);
+        outEl.hidden = true;
+        return;
+      }
+      setStatus("Uploading and predicting… (this can take a while)");
+      outEl.hidden = true;
+      const fd = new FormData();
+      fd.append("file", file, file.name);
+      try {
+        const r = await fetch(apiBase() + "/predict", { method: "POST", body: fd });
+        const text = await r.text();
+        let body;
+        try {
+          body = JSON.parse(text);
+        } catch {
+          body = text;
+        }
+        setStatus(r.ok ? "Done." : "Server returned " + r.status + ".", !r.ok);
+        showJson(body);
+      } catch (e) {
+        setStatus("Request failed.", true);
+        showJson(String(e));
+      }
+    });
+
+    btnClearLog.addEventListener("click", () => {
+      sessionLog.entries = [];
+      sessionLog.sessionStarted = "";
+      segmentCounter = 0;
+      updateLogButtons();
+      setLiveStatus("Session log cleared.");
+    });
+
+    btnDownloadTxt.addEventListener("click", () => {
+      const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+      downloadTextFile("cognitive_load_results_" + stamp + ".txt", formatSessionLogText());
+      setLiveStatus("Download started.");
+    });
+
+    btnLiveStop.addEventListener("click", () => {
+      liveRunning = false;
+      btnLiveStart.disabled = false;
+      btnLiveStop.disabled = true;
+      setLiveStatus("Stopping after current segment…");
+    });
+
+    btnLiveStart.addEventListener("click", async () => {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        setLiveStatus("Camera API not available in this browser.", true);
+        return;
+      }
+      const mimeChoice = pickRecorderMime();
+      if (!mimeChoice && !window.MediaRecorder) {
+        setLiveStatus("MediaRecorder not supported.", true);
+        return;
+      }
+
+      const seg = Math.max(3, Math.min(120, parseInt(segmentSecInput.value, 10) || 6));
+      segmentSecInput.value = String(seg);
+
+      try {
+        mediaStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "user", width: { ideal: 1280 }, height: { ideal: 720 } },
+          audio: false,
+        });
+      } catch (e) {
+        setLiveStatus("Could not open webcam: " + (e && e.message ? e.message : String(e)), true);
+        return;
+      }
+
+      camPreview.srcObject = mediaStream;
+      liveRunning = true;
+      btnLiveStart.disabled = true;
+      btnLiveStop.disabled = false;
+
+      if (!sessionLog.sessionStarted) {
+        sessionLog.sessionStarted = new Date().toISOString();
+        sessionLog.apiBase = apiBase();
+        sessionLog.segmentSeconds = seg;
+      } else {
+        sessionLog.apiBase = apiBase();
+        sessionLog.segmentSeconds = seg;
+      }
+
+      setLiveStatus("Live: recording segment " + (segmentCounter + 1) + "…");
+
+      (async function loop() {
+        const ext = extensionForMime(mimeChoice);
+        while (liveRunning && mediaStream && mediaStream.active) {
+          const durationMs = Math.max(3000, seg * 1000);
+          let blob;
+          try {
+            blob = await recordSegment(mediaStream, mimeChoice || undefined, durationMs);
+          } catch (e) {
+            setLiveStatus("Recording failed: " + (e && e.message ? e.message : String(e)), true);
+            liveRunning = false;
+            break;
+          }
+          if (!liveRunning) break;
+          if (!blob || blob.size < 256) {
+            setLiveStatus("Segment too small; check camera.", true);
+            const ts = new Date().toISOString();
+            segmentCounter += 1;
+            sessionLog.entries.push({
+              timestampUtc: ts,
+              segmentIndex: segmentCounter,
+              filename: "segment_" + segmentCounter + ext,
+              httpStatus: 0,
+              ok: false,
+              payload: "empty_or_tiny_blob",
+            });
+            updateLogButtons();
+            continue;
+          }
+
+          segmentCounter += 1;
+          const filename = "webcam_segment_" + segmentCounter + ext;
+          setLiveStatus("Uploading segment " + segmentCounter + "…");
+
+          let res;
+          try {
+            res = await postPredictBlob(blob, filename);
+          } catch (e) {
+            res = { ok: false, status: 0, body: String(e) };
+          }
+
+          const ts = new Date().toISOString();
+          sessionLog.entries.push({
+            timestampUtc: ts,
+            segmentIndex: segmentCounter,
+            filename,
+            httpStatus: res.status,
+            ok: res.ok,
+            payload: res.body,
+          });
+          updateLogButtons();
+          showJson(res.body);
+          setLiveStatus(
+            res.ok
+              ? "Segment " + segmentCounter + " done. Next segment in " + seg + "s…"
+              : "Segment " + segmentCounter + " failed (HTTP " + res.status + "). Next segment…",
+            !res.ok
+          );
+
+          if (!liveRunning) break;
+        }
+
+        if (mediaStream) {
+          mediaStream.getTracks().forEach((t) => t.stop());
+          mediaStream = null;
+        }
+        camPreview.srcObject = null;
+        btnLiveStart.disabled = false;
+        btnLiveStop.disabled = true;
+        liveRunning = false;
+        setLiveStatus("Live stopped. Download results.txt when ready.");
+      })();
+    });
+  </script>
+</body>
+</html>

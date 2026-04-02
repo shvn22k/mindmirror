@@ -1,0 +1,4 @@
+# FastAPI 0.104.x is incompatible with Starlette 1.x; use >=0.115 with matching Starlette.
+fastapi>=0.115.0
+uvicorn[standard]>=0.27.0
+python-multipart>=0.0.9
