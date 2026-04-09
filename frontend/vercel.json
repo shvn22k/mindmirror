@@ -4,5 +4,10 @@
 	"buildCommand": "npm run build",
 	"outputDirectory": "dist/client",
 	"installCommand": "npm ci",
-	"rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+	"rewrites": [
+		{
+			"source": "/((?!assets/)(?!images/)(?!favicon\\.ico$)(?!robots\\.txt$)(?!analytics\\.js$).*)",
+			"destination": "/index.html"
+		}
+	]
 }

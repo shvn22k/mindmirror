@@ -1,7 +1,9 @@
 import { motion } from 'motion/react';
 import { Eye, Sparkles, Layers, ShieldCheck, VideoOff, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import heroMeshUrl from '@/assets/hero-mesh.svg?url';
+
+/** Served from `public/images/hero.png` — stable URL; not caught by SPA rewrite that was blocking `/assets/*` on Vercel. */
+const heroImageUrl = `${import.meta.env.BASE_URL}images/hero.png`.replace(/\/{2,}/g, '/');
 
 // ─── Organic Blob ────────────────────────────────────────────────────────────
 function Blob({
@@ -132,21 +134,22 @@ export default function HomePage() {
           paddingBottom: '100px',
         }}
       >
-        {/* Bundled SVG so production (Vercel) always resolves the URL; public/assets is gitignored */}
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `url(${heroMeshUrl})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center bottom',
-            backgroundRepeat: 'no-repeat',
-          }}
+        {/* Photo: src/assets/hero.png (bundled by Vite — commit this file so Vercel gets it) */}
+        <img
+          src={heroImageUrl}
+          alt=""
+          decoding="async"
+          fetchPriority="high"
+          draggable={false}
+          className="absolute inset-0 z-0 h-full w-full min-h-[100svh] object-cover pointer-events-none select-none"
+          style={{ objectPosition: 'center bottom' }}
         />
-        {/* Soft overlay to keep text readable */}
+        {/* Single soft overlay for headline readability — does not replace the image */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 z-[1] pointer-events-none"
           style={{
-            background: 'linear-gradient(175deg, rgba(232,228,240,0.55) 0%, rgba(237,240,244,0.45) 40%, rgba(248,244,234,0.72) 100%)',
+            background:
+              'linear-gradient(175deg, rgba(232,228,240,0.55) 0%, rgba(237,240,244,0.45) 40%, rgba(248,244,234,0.72) 100%)',
           }}
         />
 
