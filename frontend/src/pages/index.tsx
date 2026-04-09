@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { Eye, Sparkles, Layers, ShieldCheck, VideoOff, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import heroMeshUrl from '@/assets/hero-mesh.svg?url';
 
 // ─── Organic Blob ────────────────────────────────────────────────────────────
 function Blob({
@@ -131,11 +132,11 @@ export default function HomePage() {
           paddingBottom: '100px',
         }}
       >
-        {/* Hero backdrop: committed SVG (replace with /assets/hero.jpg via public/ if you add a photo) */}
+        {/* Bundled SVG so production (Vercel) always resolves the URL; public/assets is gitignored */}
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: 'url(/assets/hero.png)',
+            backgroundImage: `url(${heroMeshUrl})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center bottom',
             backgroundRepeat: 'no-repeat',

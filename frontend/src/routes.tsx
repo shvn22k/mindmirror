@@ -1,6 +1,7 @@
 import { RouteObject } from 'react-router-dom';
 import { lazy } from 'react';
 import HomePage from './pages/index';
+import AboutPage from './pages/about';
 import AnalysisPage from './pages/analysis';
 import DashboardPage from './pages/dashboard';
 import RequireAuth from './components/RequireAuth';
@@ -11,6 +12,7 @@ const NotFoundPage = lazy(() => import('./pages/_404'));
 
 export const routes: RouteObject[] = [
   { path: '/', element: <HomePage /> },
+  { path: '/about', element: <AboutPage /> },
   { path: '/sign-in/*', element: <SignInPage /> },
   { path: '/sign-up/*', element: <SignUpPage /> },
   {
@@ -38,5 +40,5 @@ export const routes: RouteObject[] = [
   { path: '*', element: <NotFoundPage /> },
 ];
 
-export type Path = '/' | '/analysis' | '/dashboard' | '/sign-in' | '/sign-up';
+export type Path = '/' | '/about' | '/analysis' | '/dashboard' | '/sign-in' | '/sign-up';
 export type Params = Record<string, string | undefined>;

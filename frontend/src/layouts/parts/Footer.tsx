@@ -14,19 +14,34 @@ export default function Footer() {
           </span>
 
           {/* Links */}
-          <nav className="flex gap-8">
-            {['Privacy', 'About', 'Contact'].map(label => (
-              <Link
-                key={label}
-                to={`/${label.toLowerCase()}`}
-                className="text-sm transition-colors duration-200"
-                style={{ color: '#6C757D' }}
-                onMouseEnter={e => (e.currentTarget.style.color = '#4A405A')}
-                onMouseLeave={e => (e.currentTarget.style.color = '#6C757D')}
-              >
-                {label}
-              </Link>
-            ))}
+          <nav className="flex flex-wrap gap-6 md:gap-8">
+            <Link
+              to="/about#privacy"
+              className="text-sm transition-colors duration-200"
+              style={{ color: '#6C757D' }}
+              onMouseEnter={e => (e.currentTarget.style.color = '#4A405A')}
+              onMouseLeave={e => (e.currentTarget.style.color = '#6C757D')}
+            >
+              Privacy
+            </Link>
+            <Link
+              to="/about"
+              className="text-sm transition-colors duration-200"
+              style={{ color: '#6C757D' }}
+              onMouseEnter={e => (e.currentTarget.style.color = '#4A405A')}
+              onMouseLeave={e => (e.currentTarget.style.color = '#6C757D')}
+            >
+              About
+            </Link>
+            <Link
+              to="/about#contact"
+              className="text-sm transition-colors duration-200"
+              style={{ color: '#6C757D' }}
+              onMouseEnter={e => (e.currentTarget.style.color = '#4A405A')}
+              onMouseLeave={e => (e.currentTarget.style.color = '#6C757D')}
+            >
+              Contact
+            </Link>
           </nav>
         </div>
 
