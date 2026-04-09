@@ -10,10 +10,14 @@ Env:
     CLASSIFICATION_MODEL default xgboost_classification.joblib
     INFERENCE_FPS       default 25
     INFERENCE_SAMPLE_EVERY default 3
+
+Trained artifacts (preprocess.joblib + *.joblib models) are not in git. For Render, add a
+disk or build step and point MODELS_DIR at that path, or copy files into models/trained/.
 """
 
 from __future__ import annotations
 
+import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
@@ -22,12 +26,19 @@ from fastapi.middleware.cors import CORSMiddleware
 from backend.pipeline import CognitiveLoadPredictor, predict_uploaded_video
 
 _predictor: CognitiveLoadPredictor | None = None
+_log = logging.getLogger(__name__)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global _predictor
-    _predictor = CognitiveLoadPredictor.from_env()
+    _predictor = CognitiveLoadPredictor.try_from_env()
+    if _predictor is None:
+        _log.warning(
+            "Predictor not loaded: missing files under MODELS_DIR (default models/trained). "
+            "Add preprocess.joblib, regression, and classification .joblib artifacts, "
+            "or set MODELS_DIR to a persistent disk path."
+        )
     yield
     _predictor = None
 
@@ -50,7 +61,13 @@ app.add_middleware(
 @app.get("/health")
 def health():
     ok = _predictor is not None
-    return {"status": "ok" if ok else "unavailable", "models_loaded": ok}
+    out: dict = {"status": "ok" if ok else "unavailable", "models_loaded": ok}
+    if not ok:
+        out["reason"] = (
+            "Trained artifacts missing. Deploy preprocess.joblib and model .joblib files "
+            "into models/trained/ or set MODELS_DIR to a volume containing them."
+        )
+    return out
 
 
 @app.post("/predict")

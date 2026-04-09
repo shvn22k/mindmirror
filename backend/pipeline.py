@@ -83,6 +83,14 @@ class CognitiveLoadPredictor:
         sample_every = int(os.environ.get("INFERENCE_SAMPLE_EVERY", "3"))
         return cls(fps=fps, sample_every=sample_every)
 
+    @classmethod
+    def try_from_env(cls) -> CognitiveLoadPredictor | None:
+        """Like from_env(), but returns None if trained artifacts are missing (e.g. fresh PaaS deploy)."""
+        try:
+            return cls.from_env()
+        except FileNotFoundError:
+            return None
+
     def _feats_dict_to_matrix(self, feats: dict[str, Any]) -> tuple[np.ndarray, list[str]]:
         row: list[float] = []
         missing: list[str] = []

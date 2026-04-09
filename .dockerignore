@@ -1,0 +1,36 @@
+.git
+.github
+.cursor
+mcps
+.venv
+venv
+ENV
+__pycache__
+*.py[cod]
+*.egg-info
+.pytest_cache
+.coverage
+htmlcov
+
+# Frontend / tooling (not in API image)
+frontend/node_modules
+frontend/dist
+legacy-frontend
+
+# Data and training artifacts (huge)
+data
+artifacts
+results
+*.avi
+*.mp4
+*.webm
+*.npy
+*.parquet
+*.csv
+*.tsv
+
+# Editor / OS
+.idea
+.vscode
+.DS_Store
+Thumbs.db

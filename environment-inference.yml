@@ -1,0 +1,22 @@
+# Conda env for inference API only (Docker / local: micromamba or conda env create -f).
+# Heavier training stack (torch, tabnet, lightgbm, catboost) stays in requirements.txt.
+
+name: inference
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11.*
+  - ca-certificates
+  - ffmpeg
+  - numpy>=1.24
+  - pandas>=2.0
+  - opencv>=4.8
+  - mediapipe>=0.10
+  - scikit-learn>=1.3
+  - joblib>=1.3
+  - xgboost>=2.0
+  - fastapi>=0.115
+  - python-multipart>=0.0.9
+  - pip
+  - pip:
+      - "uvicorn[standard]>=0.27.0"
