@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Core Colors */
+    --background: 43 50% 95%;
+    --foreground: 0 0% 4%;
+    --card: 206 23% 82%;
+    --card-foreground: 263 17% 30%;
+    --popover: 43 50% 95%;
+    --popover-foreground: 0 0% 4%;
+    --primary: 263 19% 62%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 120 7% 59%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 206 23% 82%;
+    --muted-foreground: 208 7% 46%;
+    --accent: 206 23% 82%;
+    --accent-foreground: 0 0% 34%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 206 23% 82%;
+    --input: 206 23% 82%;
+    --ring: 263 19% 62%;
+
+    /* Extended Colors */
+    --chart-1: 262 20% 92%;
+    --chart-2: 262 19% 77%;
+    --chart-3: 263 19% 62%;
+    --chart-4: 263 19% 47%;
+    --chart-5: 263 20% 32%;
+
+    /* Sidebar Colors */
+    --sidebar: 206 23% 82%;
+    --sidebar-foreground: 0 0% 4%;
+    --sidebar-primary: 263 19% 62%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 206 23% 82%;
+    --sidebar-accent-foreground: 0 0% 34%;
+    --sidebar-border: 206 23% 82%;
+    --sidebar-ring: 263 19% 62%;
+
+    /* Typography */
+    --font-sans: "Lexend", "Atkinson Hyperlegible", -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-heading: "Lexend", "Atkinson Hyperlegible", -apple-system, BlinkMacSystemFont, sans-serif;
+
+    /* MindMirror custom tokens */
+    --mm-heading: #4A405A;
+    --mm-body: #4F4F4F;
+    --mm-muted: #6C757D;
+    --mm-lavender: #9A8CB1;
+    --mm-green: #8F9D8F;
+    --mm-surface: #C6D2DB;
+    --mm-bg: #F8F4EA;
+    --font-serif: ui-serif, Georgia, "Times New Roman", serif;
+    --font-mono: ui-monospace, "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+
+    /* Border Radius */
+    --radius: 0.5rem;
+
+    /* Shadows */
+    --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+    --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+    --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 2px 4px -1px hsl(0 0% 0% / 0.10);
+    --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
+    --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
+    --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  
+    font-family: var(--font-sans);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading) !important;
+  }
+}
+
+/* Custom utility classes */
+@layer utilities {
+  .animate-in {
+    animation-duration: 0.2s;
+    animation-fill-mode: both;
+  }
+
+  .fade-in {
+    animation-name: fadeIn;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/* Unless told otherwise, keep it for smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}

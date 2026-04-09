@@ -61,8 +61,8 @@ We intentionally **do not** claim to use every modality or label in AVCAffe—on
           ┌───────────────────────────┼───────────────────────────┐
           ▼                           ▼                           ▼
 ┌──────────────────┐       ┌──────────────────┐       ┌──────────────────┐
-│  Batch pipeline  │       │  Inference API   │       │  Browser test UI │
-│  (offline train) │       │  FastAPI + model │       │  static HTML/JS  │
+│  Batch pipeline  │       │  Inference API   │       │  MindMirror UI   │
+│  (offline train) │       │  FastAPI + model │       │  Vite + React    │
 └────────┬─────────┘       └────────┬─────────┘       └────────┬─────────┘
          │                          │                          │
          │                          │    multipart video       │
@@ -238,11 +238,11 @@ Example headline numbers from a full run (including TabNet + ensemble) are refle
 
 ---
 
-### 8. Frontend (test harness, not the final branded app)
+### 8. Frontend (MindMirror)
 
-- **Path:** `frontend/index.html`
-- **File mode:** Upload video → `POST /predict` → show JSON.
-- **Live mode:** `getUserMedia` + **MediaRecorder** fixed-length segments → same endpoint → append structured entries → **Download `results.txt`** (session log for QA / demos).
+- **Path:** `frontend/` — Vite + React + TypeScript (live analysis, dashboard, marketing pages).
+- **API wiring:** In development, Vite proxies **`/inference`** → FastAPI (default `http://127.0.0.1:8000`). The analysis flow calls **`POST /inference/predict`** (same as **`POST /predict`** on the Python app). Override with **`VITE_INFERENCE_API_URL`** when the browser must talk to the API directly (ensure CORS).
+- **Legacy harness:** `legacy-frontend/index.html` — static upload / MediaRecorder test page (optional QA).
 
 ---
 
@@ -255,7 +255,8 @@ Example headline numbers from a full run (including TabNet + ensemble) are refle
 | `training/` | Data prep, model wrappers, metrics, ensemble |
 | `scripts/` | CLI: extract → frame features → aggregate → train |
 | `backend/` | HTTP API + predictor wiring |
-| `frontend/` | Static test page |
+| `frontend/` | MindMirror web app (Vite + React) |
+| `legacy-frontend/` | Static HTML test harness (optional) |
 | `data/` | See `data/README.md`; `processed/` is local only |
 | `models/trained/` | Your checkpoints + `preprocess.joblib` (local only) |
 
@@ -272,7 +273,8 @@ pip install -r requirements.txt
 1. Place or generate `data/processed/...` per `data/README.md`.
 2. Run extraction → feature extraction → aggregation → `train_model.py`.
 3. `uvicorn backend.main:app --port 8000`
-4. Serve `frontend/` over HTTP and open the page (webcam requires localhost/HTTPS).
+4. In another terminal: `cd frontend`, `npm install`, `npm run dev` (default [http://localhost:5173](http://localhost:5173)). Ensure the FastAPI server is running so `/inference` can be proxied to it.
+5. Copy `frontend/env.example` to `frontend/.env` if you need custom ports or **`VITE_INFERENCE_API_URL`**.
 
 ---
 
