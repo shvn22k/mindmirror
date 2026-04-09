@@ -1,26 +1,35 @@
-# Backend inference service only. Conda env via micromamba (conda-forge).
+# Backend inference API. Pip + Debian slim (reliable on Render; avoids conda solver issues).
 #   docker build -t mindmirror-api .
 #
-# Trained weights: models/trained/ is gitignored — copy/mount at deploy or use a persistent disk.
+# Refresh locked deps from conda env `cogload` (optional):
+#   conda activate cogload
+#   pip freeze > requirements-docker.txt
+#   (then trim training-only packages if the image/build is too heavy)
+#
+# Trained weights: models/trained/ is gitignored — mount a disk + MODELS_DIR or bake in CI.
 
-FROM mambaorg/micromamba:2-ubuntu22.04
+FROM python:3.11-slim-bookworm
 
 ENV PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONPATH=/app
 
 WORKDIR /app
 
-COPY --chown=$MAMBA_USER:$MAMBA_USER environment-inference.yml /tmp/environment-inference.yml
-RUN micromamba env create -f /tmp/environment-inference.yml -y \
-    && micromamba clean -a -y
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ffmpeg \
+    libglib2.0-0 \
+    libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
 
-ENV PYTHONPATH=/app \
-    PATH="/opt/conda/envs/inference/bin:$PATH"
+COPY requirements-docker.txt .
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r requirements-docker.txt
 
-COPY --chown=$MAMBA_USER:$MAMBA_USER backend ./backend
-COPY --chown=$MAMBA_USER:$MAMBA_USER cognitive_load ./cognitive_load
-COPY --chown=$MAMBA_USER:$MAMBA_USER features ./features
-COPY --chown=$MAMBA_USER:$MAMBA_USER models ./models
+COPY backend ./backend
+COPY cognitive_load ./cognitive_load
+COPY features ./features
+COPY models ./models
 
 RUN mkdir -p models/mediapipe \
     && python -c "import urllib.request; urllib.request.urlretrieve('https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task', 'models/mediapipe/face_landmarker.task')"

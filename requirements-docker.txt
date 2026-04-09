@@ -1,0 +1,22 @@
+# Pinned pip set for the API Docker image (Linux). Used by Dockerfile.
+#
+# To match your local conda env `cogload` as closely as pip allows:
+#   conda activate cogload
+#   pip freeze > requirements-docker.txt
+# Then delete lines you do not need on the server (torch, lightgbm, catboost,
+# pytorch-tabnet, etc.) if the free Render build runs out of memory or time.
+#
+# Note: Docker never reads your conda *env name* — only this file matters inside the image.
+
+numpy>=1.24,<3
+pandas>=2.0,<3
+opencv-python-headless>=4.8,<5
+mediapipe>=0.10
+
+scikit-learn>=1.3,<2
+joblib>=1.3,<2
+xgboost>=2.0,<4
+
+fastapi>=0.115,<1
+uvicorn[standard]>=0.27,<1
+python-multipart>=0.0.9,<1

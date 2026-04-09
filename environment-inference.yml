@@ -1,4 +1,9 @@
-# Conda env for inference API only (Docker / local: micromamba or conda env create -f).
+# Optional: local conda env (name below is only for `conda env create -f`).
+# Docker on Render uses requirements-docker.txt + Dockerfile, not this file.
+#
+#   conda env create -f environment-inference.yml
+#   conda activate inference
+#
 # Heavier training stack (torch, tabnet, lightgbm, catboost) stays in requirements.txt.
 
 name: inference
