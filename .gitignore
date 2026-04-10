@@ -74,9 +74,13 @@ data/*
 *.csv
 *.tsv
 
-# Trained weights and preprocess artifact
+# Trained weights and preprocess artifact (default: ignore bulk; allow pinned inference bundle)
 models/trained/*
 !models/trained/.gitkeep
+!models/trained/REQUIRED.txt
+!models/trained/preprocess.joblib
+!models/trained/xgboost_regression.joblib
+!models/trained/xgboost_classification.joblib
 
 # MediaPipe task bundle (downloaded at runtime)
 models/mediapipe/*.task
