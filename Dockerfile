@@ -16,10 +16,14 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR /app
 
+# MediaPipe tasks load libGLESv2.so.2 / EGL — slim images omit these unless installed explicitly.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
     libglib2.0-0 \
     libgomp1 \
+    libegl1-mesa \
+    libgles2-mesa \
+    libgl1-mesa-dri \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements-docker.txt .
